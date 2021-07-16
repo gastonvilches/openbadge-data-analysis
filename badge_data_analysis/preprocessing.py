@@ -3,14 +3,14 @@ import numpy as np
 
 # To do: comment and document all
 
-def read_file(filename, excluded_members_id=[]):
+def read_file(filename, excluded_members=[]):
     # Read text lines and save signal and timestamps to data structure
     data = {}
     with open(filename, 'r') as fid:
         for line in fid.readlines():
             packet = json.loads(line)
             member = packet['data']['member_id']
-            if member in excluded_members_id:
+            if member in excluded_members:
                 continue
             ts = packet['data']['timestamp']
             sp = packet['data']['sample_period']/1000
