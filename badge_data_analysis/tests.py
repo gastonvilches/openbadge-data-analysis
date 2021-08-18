@@ -16,7 +16,7 @@ def num_samples_analysis(filename):
 
 def sampling_rate_uniformity(data):
     data2 = {}
-    for member in data.keys():
+    for member in data.members:
         data2[member] = {'signal': np.diff(data[member]['time']),
                             'time': data[member]['time'][:-1].copy()}
     fig, axes = plot.signals(data2, title='Sampling period over time')
