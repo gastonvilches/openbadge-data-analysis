@@ -1,2 +1,5 @@
 /.ipynb_checkpoints/
 **/__pycache__/
+dev_test.py
+run_tests.ipynb
+badge_data_analysis/tests.py
