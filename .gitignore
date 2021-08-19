@@ -1,5 +1,2 @@
 /.ipynb_checkpoints/
 **/__pycache__/
-dev_test.py
-.gitignore
-/data/audio_data_session_1_orig.txt
