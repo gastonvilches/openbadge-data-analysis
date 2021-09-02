@@ -1,12 +1,6 @@
 import numpy as np
 from scipy.stats import gaussian_kde
 
-# To do: Comment and document all
-#
-#        Reduce code length
-#
-#        Make functions that runs the typical pipeline
-
 def xcorr(x, y, max_lag=None, normalize=True, eps=1e-5):
     if len(x) > len(y):
         s, l = y, x

@@ -3,10 +3,6 @@ from datetime import datetime
 import numpy as np
 from .vad import _positive_kde
 
-# To do: plot legend
-#
-#        comment and document all
-
 def signals(data, title=None, fig=None, axes=None):
     if fig == None:
         fig, axes = plt.subplots(nrows=len(data), ncols=1, sharex=True, sharey=True)
@@ -50,7 +46,7 @@ def histograms(data, num_bins=30, plot_thresholds=True, plot_kde=True, bandwidth
 def vad(data, gen_speak=True, all_speak=True, real_speak=True):
     if real_speak:
         fig, axes = plt.subplots(nrows=len(data)+1, ncols=1, sharex=True)
-        axes[0].get_shared_x_axes().join(*axes[:-1])
+        axes[0].get_shared_y_axes().join(*axes[:-1])
         fig, axes = signals(data, 'Voice activity detection', fig, axes)
     else:
         fig, axes = signals(data, 'Voice activity detection')
@@ -85,8 +81,6 @@ def vad(data, gen_speak=True, all_speak=True, real_speak=True):
         axes[-1].set_yticklabels(yticks)
     return fig, axes
 
-# def _barplot(data, key, title)
-
 def metrics(data):
     fig, axes = plt.subplots(2,2)
     metrics = ['speaking_time', 'overlap_time', 'overlap_count', 'turn_taking_count']
@@ -98,6 +92,8 @@ def metrics(data):
         axes[r,c].set_xticklabels(data.members)
         # axes[r,c].set_title(' '.join([x.capitalize() for x in metrics[i].split('_')]))
         axes[r,c].set_title(titles[r*2+c])
+    axes[0,0].get_shared_y_axes().join(axes[0,0], axes[0,1])
+    axes[0,1].set_ylim(axes[0,0].get_ylim())
     return fig, axes
 
 

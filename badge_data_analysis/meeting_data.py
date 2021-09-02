@@ -3,6 +3,15 @@ import numpy as np
 INIT_VALUE = -1.0
 
 class MeetingData():
+    ''' This class defines a data structure to store the audio meeting data. It
+    is basically a dictionary where the keys are the participants numbers and
+    the values are the data of each participant. It also have some 
+    functionality to simplify code needed to process the data.
+    
+    Each function of the vad, processing (finish this)
+    
+    
+    '''
     
     def __init__(self):
         self._data = {}
@@ -30,7 +39,8 @@ class MeetingData():
             if not 'is_beacon' in self._data[list(self._data.keys())[0]].keys():
                 return sorted(list(self._data.keys()))
             else:
-                return sorted([m for m in self._data.keys() if not self._data[m]['is_beacon']])
+                return sorted([m for m in self._data.keys() if (type(m) == int 
+                                         and not self._data[m]['is_beacon'])])
         else:
             return []
     

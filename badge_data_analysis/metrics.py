@@ -1,8 +1,3 @@
-
-# To do: comment and document all
-#
-#        Make functions that runs the typical pipeline
-
 import numpy as np
 
 def speaking_time(data):
@@ -78,10 +73,47 @@ def turn_taking(data, min_succesive_non_overlap=2, fill_gaps=False, max_gap=1):
                     non_overlap_accum = np.zeros((len(data.members),))
     return data
 
-
-
-
-
+def calculate_indicators(data, print_results=True, round_decimals=2):
+    p_values = np.array([data[m]['speaking_time'] for m in data.members])
+    o_values = np.array([data[m]['overlap_time'] for m in data.members])
+    oc_values = np.array([data[m]['overlap_count'] for m in data.members])
+    tt_values = np.array([data[m]['turn_taking_count'] for m in data.members])
+    
+    p_cv = np.std(p_values)/np.mean(p_values)
+    dominance = p_values.max()/np.mean(p_values[p_values != p_values.max()])
+    
+    total_p = np.sum(p_values)
+    total_o = np.sum(o_values)
+    total_cp = total_p - total_o
+    
+    total_oc = np.sum(oc_values)
+    total_tt = np.sum(tt_values)
+    
+    avg_s_segm = total_p/total_tt*data.meeting_duration
+    avg_o_segm = total_o/total_oc*data.meeting_duration
+    ttf = total_tt/(data.meeting_duration/60)
+        
+    if print_results:
+        d = round_decimals
+        print('Team vocalization distribution:')
+        print('    Coefficient of variation:  ', np.round(p_cv, d))
+        print('    Dominance:                 ', np.round(dominance, d))
+        print('    Total team participation:  ', str(np.round(100*total_p, d)) + '%')
+        print('    Clean participation:       ', str(np.round(100*total_cp, d)) + '%')
+        print('Turn taking:')
+        print('    Team turn taking frequency:', np.round(ttf, d), 'Turns/min')
+        print('    Avgerage speech segment:   ', np.round(avg_s_segm, d), 'sec')
+        print('Overlapping speech:')
+        print('    Total overlap time:        ', str(np.round(100*total_o, d)) + '%')
+        print('    Avgerage overlap duration: ', np.round(avg_o_segm, d), 'sec')
+        
+    return (p_values, p_cv, dominance, total_p, total_cp, tt_values, ttf,
+            avg_s_segm, o_values, oc_values, total_o, avg_o_segm)
+    
+    
+    
+    
+    
 
 
 

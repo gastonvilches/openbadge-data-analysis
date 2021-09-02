@@ -2,10 +2,6 @@ import json
 import numpy as np
 from .meeting_data import MeetingData
 
-# To do: comment and document all
-#
-#        Make functions that runs the typical pipeline
-
 def read_file(filename, excluded_members=[]):
     # Read text lines and save signal and timestamps to data structure
     data = MeetingData()
