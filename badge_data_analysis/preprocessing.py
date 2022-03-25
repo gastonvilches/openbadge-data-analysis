@@ -54,7 +54,11 @@ def truncate(data):
                                  data[member]['time'] <= data.meeting_end)
         data[member]['signal'] = data[member]['signal'][indices]
         data[member]['time'] = data[member]['time'][indices]
-        
+        if data[member]['time'][0] - data.meeting_start > 1:
+            time_missing = np.arange(data.meeting_start, data[member]['time'][0], data.sample_period)
+            data[member]['time'] = np.hstack((time_missing, data[member]['time']))
+            signal_missing = np.zeros(time_missing.shape)
+            data[member]['signal'] = np.hstack((signal_missing, data[member]['signal']))
     return data
     
     # To do: Print info about truncation

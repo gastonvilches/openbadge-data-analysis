@@ -92,6 +92,7 @@ def metrics(data):
         axes[r,c].set_xticklabels(data.members)
         # axes[r,c].set_title(' '.join([x.capitalize() for x in metrics[i].split('_')]))
         axes[r,c].set_title(titles[r*2+c])
+        axes[r,c].grid(alpha=0.3)
     axes[0,0].get_shared_y_axes().join(axes[0,0], axes[0,1])
     axes[0,1].set_ylim(axes[0,0].get_ylim())
     return fig, axes

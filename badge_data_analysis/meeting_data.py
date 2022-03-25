@@ -78,6 +78,14 @@ class MeetingData():
             self.__me = np.min([self._data[member]['time'][-1] for member in self.members])
         return self.__me
     
+    @meeting_start.setter
+    def meeting_start(self, meeting_start):
+        self.__ms = meeting_start
+    
+    @meeting_end.setter
+    def meeting_end(self, meeting_end):
+        self.__me = meeting_end
+        
     @property
     def meeting_duration(self):
         return self.__me - self.__ms
