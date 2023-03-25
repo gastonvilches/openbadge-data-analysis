@@ -1,7 +1,7 @@
 import numpy as np
 from scipy.stats import gaussian_kde
 
-def xcorr(x, y, max_lag=None, normalize=True, eps=1e-5):
+def xcorr(x, y, max_lag=None, normalize=True, eps=1e-10):
     if len(x) > len(y):
         s, l = y, x
     else:
@@ -20,7 +20,7 @@ def xcorr(x, y, max_lag=None, normalize=True, eps=1e-5):
     for lag in range(out_len):
         corr[lag] = np.sum(l[lag:lag+len(s)]*s)
         if normalize:
-            corr[lag] /= np.sqrt(np.sum(l[lag:lag+len(s)]**2)*s_energy)
+            corr[lag] /= np.sqrt(np.sum(l[lag:lag+len(s)]**2)*s_energy + eps)
     return corr
 
 def genuine_speak(data, window=1.0, max_temp_shift=0.15, corr_thr=0.85, 
@@ -124,8 +124,8 @@ def calculate_thresholds(data, bandwidth=None):
         if np.any(data[member]['gen_speak'] > 0):
             data[member]['thr_mean'] = _detect_thr(data[member], 'win_mean', bandwidth)
             data[member]['thr_std'] = _detect_thr(data[member], 'win_std', bandwidth)
-            print('Member', member, 'mean thr:', np.round(data[member]['thr_mean'],2))
-            print('Member', member, 'std  thr:', np.round(data[member]['thr_std'],2))
+            # print('Member', member, 'mean thr:', np.round(data[member]['thr_mean'],2))
+            # print('Member', member, 'std  thr:', np.round(data[member]['thr_std'],2))
         else:
             data[member]['is_beacon'] = True
     return data

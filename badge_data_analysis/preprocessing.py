@@ -30,20 +30,24 @@ def read_file(filename, excluded_members=[]):
 
 def fix_time_jumps(data, max_jump_sec=1):
     # Find and fix time jumps due to clock synchronization with hub
-    time_jumps_ids = []
+    # time_jumps_ids = []
     for member in data.members:
-        diff = np.diff(data[member]['time'])
-        idx = np.argmax(diff)
-        if diff[idx] > max_jump_sec:
-            time_jumps_ids.append(member)
-            offset = diff[idx] - diff[idx+1]
-            length, = data[member]['time'].shape
-            data[member]['time'] += np.pad(offset*np.ones((idx,)), 
-                                              (0,length-idx))
+        while True:
+            diff = np.diff(data[member]['time'])
+            diff_abs = np.abs(diff)
+            idx = np.argmax(diff_abs)
+            if diff_abs[idx] > max_jump_sec:
+                # time_jumps_ids.append(member)
+                offset = diff[idx] - np.median(diff)
+                length, = data[member]['time'].shape
+                data[member]['time'] += np.pad(offset*np.ones((idx+1,)), 
+                                               (0,length-idx-1))
+            else:
+                break
 
-    # Print info about time jump found
-    if any(time_jumps_ids):
-        print('Time jumps found in ' + str(time_jumps_ids))
+    # # Print info about time jump found
+    # if any(time_jumps_ids):
+    #     print('Time jumps found in ' + str(time_jumps_ids))
     
     return data
 
@@ -66,7 +70,7 @@ def truncate(data):
 def remove_offset(data, percentile=1):
     # Remove the badge-specific offset due to noise floor
     for member in data.members:
-        offset = int(np.percentile(data[member]['signal'], percentile) - 1)
+        offset = int(np.percentile(data[member]['signal'], percentile))
         data[member]['signal'] -= offset
         data[member]['signal'] = np.clip(data[member]['signal'], 0, None)
     return data
